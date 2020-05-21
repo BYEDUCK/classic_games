@@ -1,8 +1,14 @@
-const canvasWidth = 400;
-const canvasHeight = 400;
-const speed = 10;
+const canvasWidth = 396;
+const canvasHeight = 396;
+const speed = 12;
+const segSize = 12;
+const levels = [0, 0, 10, 30, 60, 100];
+const frameRates = [0, 10, 15, 25, 35, 45];
+
+var level;
 var snake;
 var food;
+var score;
 
 class Food {
 	constructor(x, y) {
@@ -12,23 +18,38 @@ class Food {
 
 	draw() {
 		fill(0);
-		rect(this.x, this.y, 10, 10);
+		rect(this.x, this.y, segSize, segSize);
 	}
+}
+
+function printScore() {
+	textSize(20);
+	text('level: ' + level + ' score: ' + score, 10, canvasHeight + 25);
+	fill(0, 102, 153);
 }
 
 function setup() {
 	frameRate(10);
-	createCanvas(canvasWidth, canvasHeight);
+	createCanvas(canvasWidth, canvasHeight + 50);
 	reset();
+}
+
+function increaseScore() {
+	score++;
+	if (score === levels[level + 1]) {
+		level++;
+		frameRate(frameRates[level]);
+	}
 }
 
 function draw() {
 	background(150);
+	printScore();
 	if (food) {
 		food.draw();
 	}
 	if (eaten()) {
-		console.log("EATEN");
+		increaseScore();
 		snake.addSegment();
 		generateFood();
 	}
@@ -38,6 +59,8 @@ function draw() {
 
 function reset() {
 	snake = new Snake();
+	score = 0;
+	level = 1;
 	generateFood();
 }
 

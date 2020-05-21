@@ -10,8 +10,8 @@ class Snake {
 	addSegment() {
 		let tailSeg = this.tail[this.tailIdx];
 		let seg = new SnakeSegment(
-			tailSeg.x - this.getSign(tailSeg.xspeed) * speed,
-			tailSeg.y - this.getSign(tailSeg.yspeed) * speed,
+			tailSeg.x - this.getSign(tailSeg.xspeed) * segSize,
+			tailSeg.y - this.getSign(tailSeg.yspeed) * segSize,
 			tailSeg.xspeed, tailSeg.yspeed
 		);
 		this.tail[++this.tailIdx] = seg
@@ -81,6 +81,6 @@ class SnakeSegment {
 
 	show() {
 		fill(255);
-		rect(this.x, this.y, 10, 10);
+		rect(this.x, this.y, segSize, segSize);
 	}
 }
