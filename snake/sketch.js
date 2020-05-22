@@ -18,15 +18,15 @@ class Food {
 	}
 
 	draw() {
-		fill(0);
+		fill('red');
 		rect(this.x, this.y, segSize, segSize);
 	}
 }
 
 function printScore() {
 	textSize(20);
+	fill('black');
 	text('level: ' + level + ' score: ' + score, 10, canvasHeight + 25);
-	fill(0, 102, 153);
 }
 
 function setup() {
@@ -64,7 +64,7 @@ function draw() {
 }
 
 function parseGameTime() {
-	let gameTimeSceonds = Math.floor(Date.now() - startTime) / 1000;
+	let gameTimeSceonds = Math.floor((Date.now() - startTime) / 1000);
 	if (gameTimeSceonds < 60) {
 		return "" + gameTimeSceonds + " seconds.";
 	} else {

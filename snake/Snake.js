@@ -95,7 +95,7 @@ class SnakeSegment {
 	}
 
 	show() {
-		fill(255);
+		fill('rgb(0,255,0)');
 		rect(this.x, this.y, segSize, segSize);
 	}
 }
