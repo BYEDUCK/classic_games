@@ -9,6 +9,7 @@ var level = 1;
 var score = 0;
 var snake;
 var food;
+var startTime;
 
 class Food {
 	constructor(x, y) {
@@ -45,7 +46,8 @@ function increaseScore() {
 function draw() {
 	background(150);
 	if (snake.isCollision()) {
-		alert("GAME OVER! Score: " + score);
+		let gameTime = Date.now() - startTime;
+		alert("GAME OVER! Score: " + score + " in time of " + parseGameTime());
 		reset();
 	}
 	printScore();
@@ -61,12 +63,22 @@ function draw() {
 	snake.show();
 }
 
+function parseGameTime() {
+	let gameTimeSceonds = Math.floor(Date.now() - startTime) / 1000;
+	if (gameTimeSceonds < 60) {
+		return "" + gameTimeSceonds + " seconds.";
+	} else {
+		return "" + Math.floor(gameTimeSceonds / 60) + " minute(s) and " + Math.floor(gameTimeSceonds % 60) + " second(s)."
+	}
+}
+
 function reset() {
 	snake = new Snake();
 	score = 0;
 	level = 1;
 	frameRate(frameRates[level]);
 	generateFood();
+	startTime = Date.now();
 }
 
 function eaten() {
