@@ -1,3 +1,5 @@
+var segmentPositions = new HashSet();
+
 class Snake {
 
 	constructor() {
@@ -5,6 +7,7 @@ class Snake {
 		this.tail = [];
 		this.tail.push(new SnakeSegment(0, 0, speed, 0));
 		this.head = this.tail[0];
+		segmentPositions = new HashSet();
 	}
 
 	addSegment() {
@@ -14,7 +17,15 @@ class Snake {
 			tailSeg.y - this.getSign(tailSeg.yspeed) * segSize,
 			tailSeg.xspeed, tailSeg.yspeed
 		);
+		segmentPositions.add(new Position(seg.x, seg.y));
 		this.tail[++this.tailIdx] = seg
+	}
+
+	isCollision() {
+		if (this.tail.length === 1) {
+			return false;
+		}
+		return segmentPositions.contains(new Position(this.head.x, this.head.y));
 	}
 
 	dir(x, y) {
@@ -23,9 +34,9 @@ class Snake {
 	}
 
 	update() {
-		this.tail.forEach(seg => {
-			seg.update();
-		});
+		for (let i = 0; i < this.tail.length; ++i) {
+			this.tail[i].update(i === 0);
+		}
 		this.shiftMoves();
 	}
 
@@ -62,7 +73,7 @@ class SnakeSegment {
 		this.yspeed = yspeed;
 	}
 
-	update() {
+	update(isHead = false) {
 		let newX = this.x + this.xspeed;
 		if (newX < 0) {
 			newX = canvasWidth;
@@ -75,6 +86,10 @@ class SnakeSegment {
 		} else if (newY > canvasHeight) {
 			newY = 0;
 		}
+		if (!isHead) {
+			segmentPositions.delete(new Position(this.x, this.y));
+			segmentPositions.add(new Position(newX, newY));
+		}
 		this.x = newX;
 		this.y = newY;
 	}
@@ -82,5 +97,26 @@ class SnakeSegment {
 	show() {
 		fill(255);
 		rect(this.x, this.y, segSize, segSize);
+	}
+}
+
+class Position {
+	constructor(x, y) {
+		this.x = x;
+		this.y = y;
+		this.h = null;
+	}
+
+	equals(object) {
+		return object.x === this.x && object.y === this.y;
+	}
+
+	hashCode() {
+		if (this.h == null) {
+			this.h = 0;
+			this.h += 31 * this.x;
+			this.h += 31 * this.y;
+		}
+		return this.h;
 	}
 }

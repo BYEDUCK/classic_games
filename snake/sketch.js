@@ -3,12 +3,12 @@ const canvasHeight = 396;
 const speed = 12;
 const segSize = 12;
 const levels = [0, 0, 10, 30, 60, 100];
-const frameRates = [0, 10, 15, 25, 35, 45];
+const frameRates = [0, 5, 10, 25, 35, 45];
 
-var level;
+var level = 1;
+var score = 0;
 var snake;
 var food;
-var score;
 
 class Food {
 	constructor(x, y) {
@@ -29,9 +29,9 @@ function printScore() {
 }
 
 function setup() {
-	frameRate(10);
 	createCanvas(canvasWidth, canvasHeight + 50);
 	reset();
+	frameRate(frameRates[level]);
 }
 
 function increaseScore() {
@@ -44,6 +44,10 @@ function increaseScore() {
 
 function draw() {
 	background(150);
+	if (snake.isCollision()) {
+		alert("GAME OVER! Score: " + score);
+		reset();
+	}
 	printScore();
 	if (food) {
 		food.draw();
@@ -61,6 +65,7 @@ function reset() {
 	snake = new Snake();
 	score = 0;
 	level = 1;
+	frameRate(frameRates[level]);
 	generateFood();
 }
 
