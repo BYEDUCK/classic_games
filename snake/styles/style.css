@@ -1,0 +1,13 @@
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background-image: url('/snake/styles/gameboy.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    /* This centers our sketch horizontally. */
+    justify-content: center;
+    display: flex;
+}
