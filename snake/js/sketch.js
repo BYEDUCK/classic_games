@@ -29,12 +29,20 @@ function printScore() {
     text('level: ' + level + ' score: ' + score, 10, canvasHeight + 25);
 }
 
-function setup() {
+function prepareCanvas() {
     var canvas = createCanvas(canvasWidth, canvasHeight + 50);
     canvas.parent('sketch-holder');
     canvas.position(windowWidth / 2 - canvasWidth / 2, 43);
+}
+
+function setup() {
+    prepareCanvas();
     reset();
     frameRate(frameRates[level]);
+}
+
+function windowResized() {
+    prepareCanvas();
 }
 
 function increaseScore() {
@@ -47,11 +55,6 @@ function increaseScore() {
 
 function draw() {
     background(150);
-    if (snake.isCollision()) {
-        let gameTime = Date.now() - startTime;
-        alert("GAME OVER! Score: " + score + " in time of " + parseGameTime());
-        reset();
-    }
     printScore();
     if (food) {
         food.draw();
@@ -65,6 +68,11 @@ function draw() {
     snake.show();
 }
 
+function collision() {
+    alert("GAME OVER! Score: " + score + " in time of " + parseGameTime());
+    reset();
+}
+
 function parseGameTime() {
     let gameTimeSceonds = Math.floor((Date.now() - startTime) / 1000);
     if (gameTimeSceonds < 60) {
@@ -75,7 +83,7 @@ function parseGameTime() {
 }
 
 function reset() {
-    snake = new Snake();
+    snake = new Snake(() => collision());
     score = 0;
     level = 1;
     frameRate(frameRates[level]);
