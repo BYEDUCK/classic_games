@@ -69,17 +69,16 @@ function draw() {
 }
 
 function collision() {
-    alert("GAME OVER! Score: " + score + " in time of " + parseGameTime());
-    reset();
+    openForm(score, parseGameTime());
+    stop();
 }
 
 function parseGameTime() {
-    let gameTimeSceonds = Math.floor((Date.now() - startTime) / 1000);
-    if (gameTimeSceonds < 60) {
-        return "" + gameTimeSceonds + " seconds.";
-    } else {
-        return "" + Math.floor(gameTimeSceonds / 60) + " minute(s) and " + Math.floor(gameTimeSceonds % 60) + " second(s)."
-    }
+    return Math.floor((Date.now() - startTime) / 1000);
+}
+
+function stop() {
+    frameRate(0);
 }
 
 function reset() {
@@ -103,28 +102,22 @@ function generateFood() {
 }
 
 function keyPressed() {
-    let xDir, yDir;
     switch (keyCode) {
         case UP_ARROW:
-            xDir = 0;
-            yDir = -speed;
+            snake.dir(0, -speed);
             break;
         case DOWN_ARROW:
-            xDir = 0;
-            yDir = speed;
+            snake.dir(0, speed);
             break;
         case LEFT_ARROW:
-            xDir = -speed;
-            yDir = 0;
+            snake.dir(-speed, 0);
             break;
         case RIGHT_ARROW:
-            xDir = speed;
-            yDir = 0;
+            snake.dir(speed, 0);
             break;
         default:
             break;
     }
-    snake.dir(xDir, yDir);
 }
 
 function randomInt(min, max) {
