@@ -4,12 +4,48 @@ body {
 }
 
 body {
-    background-image: url('./gameboy.png');
+    background-image: url('./images/gameboy_body.svg');
     background-repeat: no-repeat;
     background-position: center;
+    background-size: 480px;
     /* This centers our sketch horizontally. */
     justify-content: center;
     display: flex;
+    overflow: hidden;
+}
+
+img.arrow {
+    position: fixed;
+    width: 70px;
+    height: 70px;
+}
+
+img.arrow.up {
+    bottom: calc(50vh - 230px);
+    left: calc(50vw - 120px);
+}
+
+img.arrow.down {
+    bottom: calc(50vh - 310px);
+    left: calc(50vw - 120px);
+}
+
+img.arrow.left {
+    bottom: calc(50vh - 270px);
+    left: calc(50vw - 195px);
+}
+
+img.arrow.right {
+    bottom: calc(50vh - 270px);
+    left: calc(50vw - 45px);
+}
+
+img.master {
+    position: fixed;
+    width: 100px;
+    height: 100px;
+    bottom: calc(50vh - 280px);
+    left: calc(50vw + 90px);
 }
 
 

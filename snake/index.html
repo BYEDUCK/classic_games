@@ -1,86 +1,90 @@
 <html>
 
-<head>
-    <link rel="stylesheet" href="styles/style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="js/HashSet.js"></script>
-    <script src="js/Snake.js"></script>
-    <script src="js/sketch.js"></script>
-    <script type="text/javascript">
-        class ResultRequest {
-            gameScore = 0
-            gameTime = 0
-            playerName = ""
-        }
-
-        var endGameFormId = "endGameForm";
-
-        function openForm(gameScore, gameTime) {
-            let formContainer = document.getElementById(endGameFormId).children[0];
-            formContainer.getElementsByClassName("info-label")[0].textContent = "Your score is " + gameScore + ".";
-            formContainer.getElementsByClassName("info-label")[1].textContent = "And you made it in " + parseGameTimeSeconds(gameTime) + ".";
-            formContainer.getElementsByClassName("hidden-seconds-input")[0].value = gameTime;
-            formContainer.getElementsByClassName("hidden-score-input")[0].value = gameScore;
-            document.getElementById(endGameFormId).style.display = "block";
-        }
-
-        function submitForm() {
-            let formContainer = document.getElementById(endGameFormId).children[0];
-            let inputs = formContainer.getElementsByTagName("input");
-            let requestBody = new ResultRequest();
-            requestBody.gameScore = parseInt(inputs[0].value);
-            requestBody.gameTime = parseInt(inputs[1].value);
-            requestBody.playerName = inputs[2].value;
-            $.ajax({
-                type: "POST",
-                url: "http://localhost:8080/results?game=snake",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                data: JSON.stringify(requestBody)
-            }).done(data => {
-                console.log("Success", data);
-            });
-            closeForm();
-        }
-
-        function closeForm() {
-            document.getElementById(endGameFormId).style.display = "none";
-            reset();
-        }
-
-        function parseGameTimeSeconds(gameTimeSeconds) {
-            if (gameTimeSeconds < 60) {
-                return "" + gameTimeSeconds + " second(s)";
-            } else {
-                return "" + Math.floor(gameTimeSeconds / 60) + " minutes " + Math.floor(gameTimeSeconds % 60) + " second(s)";
+    <head>
+        <link rel="stylesheet" href="public/style.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="js/HashSet.js"></script>
+        <script src="js/Snake.js"></script>
+        <script src="js/sketch.js"></script>
+        <script type="text/javascript">
+            class ResultRequest {
+                gameScore = 0
+                gameTime = 0
+                playerName = ""
             }
-        }
-    </script>
-</head>
 
-<body>
-    <div id="sketch-holder">
+            var endGameFormId = "endGameForm";
 
-    </div>
-    <div class="form-popup" id="endGameForm">
-        <form class="form-container" id="formContainer">
-            <div>
-                <label id="gameScore" class="info-label"></label>
-                <label id="gameTime" class="info-label"></label>
-            </div>
+            function openForm(gameScore, gameTime) {
+                let formContainer = document.getElementById(endGameFormId).children[0];
+                formContainer.getElementsByClassName("info-label")[0].textContent = "Your score is " + gameScore + ".";
+                formContainer.getElementsByClassName("info-label")[1].textContent = "And you made it in " + parseGameTimeSeconds(gameTime) + ".";
+                formContainer.getElementsByClassName("hidden-seconds-input")[0].value = gameTime;
+                formContainer.getElementsByClassName("hidden-score-input")[0].value = gameScore;
+                document.getElementById(endGameFormId).style.display = "block";
+            }
 
-            <input type="hidden" class="hidden-score-input" name="gameScore">
-            <input type="hidden" class="hidden-seconds-input" name="gameTime">
+            function submitForm() {
+                let formContainer = document.getElementById(endGameFormId).children[0];
+                let inputs = formContainer.getElementsByTagName("input");
+                let requestBody = new ResultRequest();
+                requestBody.gameScore = parseInt(inputs[0].value);
+                requestBody.gameTime = parseInt(inputs[1].value);
+                requestBody.playerName = inputs[2].value;
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:8081/api/results?game=snake",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    data: JSON.stringify(requestBody)
+                }).done(data => {
+                    console.log("Success", data);
+                });
+                closeForm();
+            }
 
-            <label for="nick"><b>Nick</b></label>
-            <input type="text" placeholder="Enter nick" required id="nick" name="nick">
+            function closeForm() {
+                document.getElementById(endGameFormId).style.display = "none";
+                reset();
+            }
 
-            <button type="button" class="btn" onclick="submitForm()">Save</button>
-            <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-        </form>
-    </div>
-</body>
+            function parseGameTimeSeconds(gameTimeSeconds) {
+                if (gameTimeSeconds < 60) {
+                    return "" + gameTimeSeconds + " second(s)";
+                } else {
+                    return "" + Math.floor(gameTimeSeconds / 60) + " minutes " + Math.floor(gameTimeSeconds % 60) + " second(s)";
+                }
+            }
+        </script>
+    </head>
+
+    <body>
+        <div id="sketch-holder">
+            <img src="./public/images/button_up.svg" class="arrow up" onclick="goUp()" />
+            <img src="./public/images/button_down.svg" class="arrow down" onclick="goDown()" />
+            <img src="./public/images/button_left.svg" class="arrow left" onclick="goLeft()" />
+            <img src="./public/images/button_right.svg" class="arrow right" onclick="goRight()" />
+            <img src="./public/images/button_master.svg" class="master" onclick="master()" />
+        </div>
+        <div class="form-popup" id="endGameForm">
+            <form class="form-container" id="formContainer">
+                <div>
+                    <label id="gameScore" class="info-label"></label>
+                    <label id="gameTime" class="info-label"></label>
+                </div>
+
+                <input type="hidden" class="hidden-score-input" name="gameScore">
+                <input type="hidden" class="hidden-seconds-input" name="gameTime">
+
+                <label for="nick"><b>Nick</b></label>
+                <input type="text" placeholder="Enter nick" required id="nick" name="nick">
+
+                <button type="button" class="btn" onclick="submitForm()">Save</button>
+                <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+            </form>
+        </div>
+    </body>
 
 </html>

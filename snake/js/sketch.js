@@ -32,7 +32,7 @@ function printScore() {
 function prepareCanvas() {
     var canvas = createCanvas(canvasWidth, canvasHeight + 50);
     canvas.parent('sketch-holder');
-    canvas.position(windowWidth / 2 - canvasWidth / 2, 43);
+    canvas.position(windowWidth / 2 - canvasWidth / 2, windowHeight / 2 - canvasHeight + 55);
 }
 
 function setup() {
@@ -48,9 +48,13 @@ function windowResized() {
 function increaseScore() {
     score++;
     if (score === levels[level + 1]) {
-        level++;
-        frameRate(frameRates[level]);
+        increaseLvl();
     }
+}
+
+function increaseLvl() {
+    level++;
+    frameRate(frameRates[level]);
 }
 
 function draw() {
@@ -101,19 +105,45 @@ function generateFood() {
     food = new Food(randomInt(0, cols) * speed, randomInt(0, rows) * speed);
 }
 
+function master() {
+    if (level === levels.length - 1) {
+        alert("GG");
+        reset();
+    } else {
+        score = levels[level + 1];
+        increaseLvl();
+    }
+}
+
+function goUp() {
+    snake.dir(0, -speed);
+}
+
+function goDown() {
+    snake.dir(0, speed);
+}
+
+function goLeft() {
+    snake.dir(-speed, 0);
+}
+
+function goRight() {
+    snake.dir(speed, 0);
+}
+
 function keyPressed() {
     switch (keyCode) {
         case UP_ARROW:
-            snake.dir(0, -speed);
+            goUp();
             break;
         case DOWN_ARROW:
-            snake.dir(0, speed);
+            goDown();
             break;
         case LEFT_ARROW:
-            snake.dir(-speed, 0);
+            goLeft();
             break;
         case RIGHT_ARROW:
-            snake.dir(speed, 0);
+            goRight();
             break;
         default:
             break;
